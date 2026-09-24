@@ -21,8 +21,13 @@ void loop() {
     delay(1000);
     return;
   }
-  Serial.println("client connected sending packet");
-  client.print("Hello from ESP32!");
+  while (client.connected()) {
+    if (client.available()) {
+      String line = client.readStringUntil('\n');
+      Serial.println(line);
+      // TODO: parser "BOUTON:ETAT" et agir
+    }
+  }
   client.stop();
   delay(1000);
 }
