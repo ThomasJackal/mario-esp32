@@ -11,7 +11,7 @@ KEY_MAP = {
     'q': 'LEFT',
     's': 'DOWN',
     'd': 'RIGHT',
-    'shift': 'A',
+    'maj': 'A',
     'space': 'B',
 }
 
