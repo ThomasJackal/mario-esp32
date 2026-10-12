@@ -1,20 +1,43 @@
 archi:
-clavier -> serveur socket -> wiFi -> esp32 -> OLED
+clavier -> serveur socket -> wiFi -> esp32 -> engine -> OLED
 
 serveur:
 Juste un serveur socket qui écoute le clavier et qui envoie les events à l'esp
 
-étapes:
+Features:
 x- moteur (collision, entities, scene, renderer)
 x- clavier
+    - serveur socket
 x- physique mario
-- environnement static (entities on layer STATIC)
+    - marche
+    - course
+    - saut
+        - gravité
+        - conservation de la vélocité
 - caméra (follow player, don't render outside camera)
 - map matrice
-- enemies
+- interactibles
+    - enemies
+        - goomba
+        - tortue
+    - bonus
+        - mushroom
+        - 1 up
+    - pipe
+    - breakable block
+    - mystery block
+    - unbreakable block
+- environement
+    - hill
+    - bush
+    - clouds
 - game over
 - bitmaps
-- environnement intératif
+
+Gestion des problèmes:
+
+
+Lib:
 
 Documentation engine:
 https://github.com/nbourre/ESP32-Game-Engine
