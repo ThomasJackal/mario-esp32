@@ -1,12 +1,19 @@
+archi:
+clavier -> serveur socket -> wiFi -> esp32 -> OLED
+
+serveur:
+Juste un serveur socket qui écoute le clavier et qui envoie les events à l'esp
+
 étapes:
-x- moteur
+x- moteur (collision, entities, scene, renderer)
 x- clavier
 x- physique mario
-- environnement static
-- caméra
+- environnement static (entities on layer STATIC)
+- caméra (follow player, don't render outside camera)
 - map matrice
 - enemies
 - game over
+- bitmaps
 - environnement intératif
 
 Documentation engine:
