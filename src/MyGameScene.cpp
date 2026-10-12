@@ -4,22 +4,25 @@
 
 extern EDGE engine;
 
+#define PLAYER_SIZE 8
+
 void MyGameScene::init() {
-    // Initialize scene
+    Renderer& r = engine.getRenderer();
+    int screenH = r.getHeight() - 2 * r.getYOffset();
+
+    player = new PlayerActor(10, screenH - PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE);
+    addEntity(player);
 }
 
 void MyGameScene::update(unsigned long deltaTime) {
-    // Game logic
+    Scene::update(deltaTime);
 }
 
 void MyGameScene::draw(Renderer& renderer) {
-    renderer.drawText(10, 10, "Hello EDGE!");
+    // Ligne de sol (bas de la zone visible).
+    int screenW = renderer.getWidth()  - 2 * renderer.getXOffset();
+    int screenH = renderer.getHeight() - 2 * renderer.getYOffset();
+    renderer.drawLine(0, screenH - 1, screenW - 1, screenH - 1);
 
-    if (KeyboardManager.GetKeyDown("A")) { 
-        renderer.drawText(0, 0, "A");
-    }
-
-    if (KeyboardManager.GetKey("RIGHT")) {
-        renderer.drawText(0, 0, "RIGHT");
-    }
+    Scene::draw(renderer);
 }
