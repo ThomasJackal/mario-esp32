@@ -6,6 +6,7 @@ struct PlayerInput {
     bool right = false;
     bool jumpPressed = false;  // front montant (vient d'être pressé)
     bool jumpHeld    = false;  // maintenu
+    bool sprint      = false;  // course (Shift maintenu)
 };
 
 // Simule la physique de plateformer du joueur.

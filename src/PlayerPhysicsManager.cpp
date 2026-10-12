@@ -7,7 +7,8 @@
 // ---------------------------------------------------------------------------
 
 // Déplacement horizontal
-#define MOVE_SPEED       55.0f   // vitesse horizontale max (px/s)
+#define WALK_SPEED       55.0f   // vitesse de marche max (px/s)
+#define SPRINT_SPEED     95.0f   // vitesse de sprint max (Shift maintenu)
 #define GROUND_ACCEL     420.0f  // accélération au sol
 #define GROUND_FRICTION  600.0f  // freinage au sol quand aucune touche pressée
 #define AIR_ACCEL        260.0f  // accélération en l'air (contrôle réduit)
@@ -44,12 +45,13 @@ void PlayerPhysicsManager::step(float& x, float& y, int w, int h,
     // --- Mouvement horizontal : accélération + friction ------------------
     float accel    = onGround ? GROUND_ACCEL    : AIR_ACCEL;
     float friction = onGround ? GROUND_FRICTION : AIR_FRICTION;
+    float maxSpeed = in.sprint ? SPRINT_SPEED : WALK_SPEED;
 
     float dir = (in.right ? 1.0f : 0.0f) - (in.left ? 1.0f : 0.0f);
     if (dir != 0.0f) {
         vx += dir * accel * dt;
-        if (vx >  MOVE_SPEED) vx =  MOVE_SPEED;
-        if (vx < -MOVE_SPEED) vx = -MOVE_SPEED;
+        if (vx >  maxSpeed) vx =  maxSpeed;
+        if (vx < -maxSpeed) vx = -maxSpeed;
     } else {
         // On ralentit vers 0 sans dépasser.
         if (vx > 0.0f)      { vx -= friction * dt; if (vx < 0.0f) vx = 0.0f; }

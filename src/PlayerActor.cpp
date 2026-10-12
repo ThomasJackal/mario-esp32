@@ -15,6 +15,7 @@ void PlayerActor::update(unsigned long deltaTime) {
     in.right = KeyboardManager.GetKey("RIGHT");
     in.jumpPressed = KeyboardManager.GetKeyDown("B");
     in.jumpHeld = KeyboardManager.GetKey("B");
+    in.sprint = KeyboardManager.GetKey("A");
 
     Renderer& r = engine.getRenderer();
     int worldW = r.getWidth()  - 2 * r.getXOffset();
