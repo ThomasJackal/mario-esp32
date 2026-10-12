@@ -1,6 +1,6 @@
 #include "EDGE.h"
 #include "src/MyGameScene.h"
-#include "src/KeyboardManager.h"
+#include "src/Managers/KeyboardManager.h"
 
 #define I2C_SDA 18
 #define I2C_SCL 17

@@ -1,5 +1,5 @@
 #include "PlayerActor.h"
-#include "KeyboardManager.h"
+#include "../Managers/KeyboardManager.h"
 #include "EDGE.h"
 
 extern EDGE engine;

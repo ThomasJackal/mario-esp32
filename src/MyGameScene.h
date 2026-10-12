@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.h"
-#include "PlayerActor.h"
+#include "Actors/PlayerActor.h"
 
 class MyGameScene : public Scene {
 public:

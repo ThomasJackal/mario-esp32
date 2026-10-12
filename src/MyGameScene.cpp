@@ -1,6 +1,6 @@
 #include "MyGameScene.h"
 #include "EDGE.h"
-#include "KeyboardManager.h"
+#include "Managers/KeyboardManager.h"
 
 extern EDGE engine;
 

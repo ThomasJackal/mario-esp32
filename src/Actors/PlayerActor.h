@@ -1,7 +1,7 @@
 #pragma once
 #include "Actor.h"
-#include "GameLayers.h"
-#include "PlayerPhysicsManager.h"
+#include "../GameLayers.h"
+#include "../Managers/PlayerPhysicsManager.h"
 
 class PlayerActor : public Actor {
 public:
