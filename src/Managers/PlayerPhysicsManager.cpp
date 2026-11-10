@@ -39,6 +39,10 @@ void PlayerPhysicsManager::reset() {
 void PlayerPhysicsManager::step(float& x, float& y, int w, int h,
                                 int worldW, int worldH,
                                 const PlayerInput& in, unsigned long deltaMs) {
+    // Cap le dt : un frame WiFi/lent traverse une tuile 8px et le joueur
+    // tombe sous le monde → culle par la camera → invisible alors que
+    // gauche/droite marchent encore.
+    if (deltaMs > 32) deltaMs = 32;
     float dt = deltaMs / 1000.0f;
     if (dt <= 0.0f) return;
 
@@ -95,10 +99,8 @@ void PlayerPhysicsManager::step(float& x, float& y, int w, int h,
     // Plafond
     if (y < 0.0f) { y = 0.0f; if (vy < 0.0f) vy = 0.0f; }
 
-    // Sol = bas de la zone jouable (pas encore de plateformes).
-    float floorY = (float)(worldH - h);
-    if (y >= floorY) {
-        y = floorY;
+    if (y + h > (float)worldH) {
+        y = (float)(worldH - h);
         vy = 0.0f;
         onGround = true;
     } else {

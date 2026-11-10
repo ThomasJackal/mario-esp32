@@ -113,12 +113,26 @@ décor piochent aussi dedans.
 - **Intégrer la physique custom au moteur** : la physique est isolée dans
   `PlayerPhysicsManager` (indépendant du moteur et du clavier). Le `PlayerActor`
   fait le pont : dans son `update()`, il construit un `PlayerInput` depuis le
-  clavier, récupère les bornes du monde via le `Renderer`, puis appelle
+  clavier, récupère les bornes du monde via la `Camera`, puis appelle
   `physics.step(...)`.
-- **Rendre une map plus grande que l'écran** *(non résolu)* : l'OLED ne fait que
-  128×46 px alors qu'un niveau est bien plus large. Il faudra une **caméra** qui
-  suit le joueur et ne dessine que la portion visible (voir *Caméra* /
-  *Map matrice* plus haut).
+- **Rendre une map plus grande que l'écran** : `World/Camera` suit le joueur,
+  convertit monde→écran et cull le hors-champ. La taille du monde vient de la
+  `TileMap` (`pixelWidth` / `pixelHeight`).
+- **TileMap et budget d'entities** : un Actor par tuile solide ferait exploser
+  la file EDGE. Les runs horizontaux de `TILE_SOLID` sont fusionnés en un seul
+  `UnbreakableBlock` large ; les `TILE_BREAKABLE` restent 1:1. La collision
+  tuile-par-tuile dans `PlayerPhysicsManager` reste une évolution future.
+- **Taille logique OLED** : le buffer SSD1306 est **128×64**. Une config
+  128×46 + `yOffset=9` laissait des bandes mortes haut/bas que la caméra
+  clipait trop tôt. On utilise tout le buffer (`SCREEN_HEIGHT 64`,
+  `setDisplayOffset(0,0)` + `setDisplaySize`).
+- **Joueur invisible (chute hors camera)** : sans clamp bas + dt non plafonné,
+  un frame lent traverse la tuile sol 8px ; le joueur tombe sous `worldH`,
+  `isVisible` le cull, mais gauche/droite marchent encore. Fix : dt max 32ms,
+  clamp bas, spawn sur le sol, draw joueur sans cull.
+- **Hauteur tilemap / bas d'écran** (`TileMap`) : tuile 8 px, `MAX_ROWS = 9`
+  (hauteur max niveau). `BOTTOM_CLIP_PX` (3) fait dépasser le sol sous le
+  viewport. Sur écran 64 px : `maxTileRowsOnScreen(64) == 8`.
 
 ---
 
@@ -136,6 +150,7 @@ décor piochent aussi dedans.
 - LLM utilisé : Cursor
   - Physique
   - Rédaction documentation
+  - Camera & Entity Culling
 
 ### Références
 

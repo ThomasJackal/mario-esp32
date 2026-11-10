@@ -1,8 +1,6 @@
 #include "PlayerActor.h"
 #include "../Managers/KeyboardManager.h"
-#include "EDGE.h"
-
-extern EDGE engine;
+#include "../World/Camera.h"
 
 PlayerActor::PlayerActor(float x, float y): Actor(x, y, SIZE, SIZE) {
     setCollisionLayer(Layers::PLAYER);
@@ -17,9 +15,8 @@ void PlayerActor::update(unsigned long deltaTime) {
     in.jumpHeld = KeyboardManager.GetKey("B");
     in.sprint = KeyboardManager.GetKey("A");
 
-    Renderer& r = engine.getRenderer();
-    int worldW = r.getWidth()  - 2 * r.getXOffset();
-    int worldH = r.getHeight() - 2 * r.getYOffset();
+    int worldW = activeCamera ? activeCamera->worldW : 0;
+    int worldH = activeCamera ? activeCamera->worldH : 0;
 
     physics.step(x, y, width, height, worldW, worldH, in, deltaTime);
 }
@@ -43,18 +40,18 @@ void PlayerActor::onCollision(Actor* other) {
     float absX = (overlapLeft < overlapRight) ? overlapLeft : overlapRight;
     float absY = (overlapTop  < overlapBottom) ? overlapTop  : overlapBottom;
 
-    // On resout sur l'axe de moindre penetration (MTV) et on tue la vitesse
-    // correspondante.
     if (absX < absY) {
-        if (overlapLeft < overlapRight) x -= overlapLeft;   // bloc a droite
-        else                            x += overlapRight;  // bloc a gauche
+        if (overlapLeft < overlapRight) x -= overlapLeft;
+        else                            x += overlapRight;
         physics.vx = 0.0f;
     } else {
-        if (overlapTop < overlapBottom) {
-            y -= overlapTop;             // on se pose sur le dessus du bloc
+        bool fromAbove = (physics.vy >= 0.0f) ||
+                         (y + height * 0.5f <= other->y + other->height * 0.5f);
+        if (fromAbove) {
+            y -= overlapTop;
             physics.onGround = true;
         } else {
-            y += overlapBottom;          // on cogne le bloc par en dessous
+            y += overlapBottom;
         }
         physics.vy = 0.0f;
     }

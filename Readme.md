@@ -14,8 +14,8 @@ x- physique mario
     - saut
         - gravité
         - conservation de la vélocité
-- caméra (follow player, don't render outside camera)
-- map matrice
+x- caméra (follow player, don't render outside camera)
+x- map matrice
 - interactibles
     - enemies
         - goomba
