@@ -19,7 +19,16 @@ void KeyboardManagerClass::update() {
     _prev = _held;
 
     if (!_client.connected()) {
-        _client.connect(_host, _port);
+        Serial.print("Connecting to ");
+        Serial.print(_host);
+        Serial.print(":");
+        Serial.println(_port);
+        if (_client.connect(_host, _port)) {
+            Serial.println("TCP connected");
+        } else {
+            Serial.println("TCP connect failed");
+            delay(500);
+        }
     }
 
     while (_client.available()) {
