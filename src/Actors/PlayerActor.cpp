@@ -4,7 +4,7 @@
 
 extern EDGE engine;
 
-PlayerActor::PlayerActor(float x, float y, int w, int h): Actor(x, y, w, h) {
+PlayerActor::PlayerActor(float x, float y): Actor(x, y, SIZE, SIZE) {
     setCollisionLayer(Layers::PLAYER);
     setCollisionMask(Layers::SOLID | Layers::ENEMY);
 }
@@ -29,6 +29,33 @@ void PlayerActor::draw(Renderer& renderer) {
 }
 
 void PlayerActor::onCollision(Actor* other) {
-    // Pas encore de plateformes/ennemis : rien à faire.
-    // La résolution fine se fera ici quand on ajoutera des Actors SOLID.
+    // Le moteur ne fait que *notifier* la collision : c'est au joueur de se
+    // repousser hors des blocs SOLID (empecher de traverser).
+    if (!other->isInLayer(Layers::SOLID)) return;
+
+    // Penetration (AABB) de chaque cote du joueur.
+    float overlapLeft   = (x + width)                - other->x;
+    float overlapRight  = (other->x + other->width)  - x;
+    float overlapTop    = (y + height)               - other->y;
+    float overlapBottom = (other->y + other->height) - y;
+
+    // Plus petite penetration sur chaque axe.
+    float absX = (overlapLeft < overlapRight) ? overlapLeft : overlapRight;
+    float absY = (overlapTop  < overlapBottom) ? overlapTop  : overlapBottom;
+
+    // On resout sur l'axe de moindre penetration (MTV) et on tue la vitesse
+    // correspondante.
+    if (absX < absY) {
+        if (overlapLeft < overlapRight) x -= overlapLeft;   // bloc a droite
+        else                            x += overlapRight;  // bloc a gauche
+        physics.vx = 0.0f;
+    } else {
+        if (overlapTop < overlapBottom) {
+            y -= overlapTop;             // on se pose sur le dessus du bloc
+            physics.onGround = true;
+        } else {
+            y += overlapBottom;          // on cogne le bloc par en dessous
+        }
+        physics.vy = 0.0f;
+    }
 }

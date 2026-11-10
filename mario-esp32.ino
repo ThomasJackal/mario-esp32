@@ -13,7 +13,7 @@ MyGameScene gameScene;
 
 void setup() {
     Serial.begin(115200);
-    KeyboardManager.begin("decode-etudiants", "learnByDoing25!", IPAddress(192, 168, 191, 148), 10000);
+    KeyboardManager.begin("decode-etudiants", "learnByDoing25!", IPAddress(192, 168, 191, 60), 10000);
 
     engine.init();
     engine.setScene(&gameScene);

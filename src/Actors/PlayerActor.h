@@ -5,9 +5,11 @@
 
 class PlayerActor : public Actor {
 public:
+    static constexpr int SIZE = 8;  // taille du joueur (px)
+
     PlayerPhysicsManager physics;
 
-    PlayerActor(float x, float y, int w, int h);
+    PlayerActor(float x, float y);
 
     void update(unsigned long deltaTime) override;
     void draw(Renderer& renderer) override;

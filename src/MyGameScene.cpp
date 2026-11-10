@@ -4,14 +4,17 @@
 
 extern EDGE engine;
 
-#define PLAYER_SIZE 8
-
 void MyGameScene::init() {
     Renderer& r = engine.getRenderer();
     int screenH = r.getHeight() - 2 * r.getYOffset();
 
-    player = new PlayerActor(10, screenH - PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE);
+    // Chaque Actor connait sa propre taille : la scene ne fait que le placer.
+    player = new PlayerActor(10, screenH - PlayerActor::SIZE);
     addEntity(player);
+
+    // Bloc cassable en suspension : le joueur peut sauter dessous pour le casser.
+    block = new BreakableBlock(40, screenH - 3 * BlockActor::SIZE);
+    addEntity(block);
 }
 
 void MyGameScene::update(unsigned long deltaTime) {

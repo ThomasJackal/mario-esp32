@@ -50,6 +50,18 @@ def on_key(event):
         send_event(button, 0)
 
 
+def local_ip():
+    """Best-effort LAN IP used for outbound traffic (for ESP32 host config)."""
+    try:
+        probe = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        probe.connect(("8.8.8.8", 80))
+        ip = probe.getsockname()[0]
+        probe.close()
+        return ip
+    except OSError:
+        return "127.0.0.1"
+
+
 def main():
     global current_client
 
@@ -61,6 +73,7 @@ def main():
     s.listen(1)
     s.settimeout(1.0)
 
+    print("PC IP: {}".format(local_ip()))
     print("Server listening on {}:{} ...".format(HOST, PORT))
     print("Keys: Z/Q/S/D = UP/LEFT/DOWN/RIGHT, LeftShift = A, Space = B")
     print("Press Ctrl+C to stop.")
